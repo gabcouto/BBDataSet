@@ -1,0 +1,45 @@
+# coisas faltando das subliminaridades, por exemplo, em artistAdd
+
+def artistAdd:
+    adiciona linha no arquivobin com:
+        Nome
+        Ultima Aparição
+        Primeira Aparição (com o mesmo valor de Última Aparição)
+        Wob-artist = 1 (será incrementado conforme for reaparecendo)
+
+
+    return indexArtist
+def musicAdd:
+    adiciona linha no arquivobin com titulo,wob-song,peak-rank, indice-musica(gerado agora), indice-artista(indexArtistTemp)   
+def artistIsPresent:
+    se encontrou o artista no nosso arquivo binário, retorna seu índice. Se não, retorna número negativo.
+def musicIsPresent:
+    se encontrou a música no nosso arquivo binário, retorna seu índice. Se não, retorna número negativo.
+
+
+para cada linha lida reversamente:
+    se artistIsPresent < 0
+    {
+        # Neste caso, precisamos adicionar tanto o artista quanto a musica.
+        indexArtistTemp = artistAdd()
+        musicAdd(indexArtistTemp)
+        # Como passar o indice-artista para o adicionar_musica?
+    }
+
+    indexArtistTemp = artistIsPresent()
+    se indexArtistTemp >= 0 # Se tivermos retornado um índice
+    {
+        se musicIsPresent < 0 # Se nao encontrarmos nenhum indice para a musica, ou seja, a musica nao está no arquivo binário.
+        {
+            musicAdd(indexArtistTemp)
+        }
+        else
+        {
+            # só existirá essa seção de código se for necessário para o parâmetro nota.
+        }
+
+        # Se o artista já está no arquivo, significa que precisamos editá-lo, porque temos um novo "Primeira Aparição"
+
+        # Se o artista já está no arquivo, também precisamos incrementar o Wob-artist, mas desde que não estejamos em uma mesma semana
+
+    }

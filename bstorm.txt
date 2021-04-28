@@ -1,0 +1,63 @@
+bstorm
+
+[GC]
+"
+Índices de acessos em todos os arquivos.
+
+critério de pesquisa do indice
+
+criar os arquivos para as entidades de tal forma que:
+    - estejam conforme suas respectivas estruturas de dados
+    - possuam Índices
+    - possam ser acessados entre si quanto às suas RELAÇÕES, E externamente pelos Índices
+    
+em q tipos de arquivos bin devem ser colocados as entidades? Serial?
+
+como usar serial?
+
+id no diagrama ta certo? 
+
+havera algum conflito na estrutura que pode impedir um arquivo de acessar outros?
+"  
+
+
+
+[GC]
+"
+Sobre as entidades:
+
+1 artista precisa acessar suas varias musicas, mas [1 musica precisa saber seu artista]
+1 artista precisa acessar sua melhor semana
+
+
+errei ao dizer que precisaremos de 1 arquivo para melhor semana (mas pode permanecer como entendidade): (slide 5)
+https://moodle.ufrgs.br/pluginfile.php/3791911/mod_resource/content/1/MER2BD.pdf
+
+
+como cada arquivo vai estar ordenado? Acho que nao vai estar. Vamos de serial, parece.
+
+
+Arquivo 1 - [Referente à entidade Artista e à entidade Melhor Semana]
+    - Campos:
+        * Nome 
+        * Wob-artist (tirar????)
+        * Primeira Aparição
+        * Última Aparição
+        * Ocorrência
+        * Quantidade de Aparições na Semana
+
+
+Arquivo 2 - [Referente apenas à entidade Músicas]
+    - Campos:
+        *
+        *
+        *
+        *
+        *
+        *
+
+excel com tabelas do output e dos arquivos, para ver quem depende do que tanto interna quanto externamente (e quem vai precisar pegar o que de quem), pra assim termos os melhores arquivos
+
+
+"
+
