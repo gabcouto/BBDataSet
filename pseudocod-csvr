@@ -15,6 +15,7 @@ def artistIsPresent:
     se encontrou o artista no nosso arquivo binário, retorna seu índice. Se não, retorna número negativo.
 def musicIsPresent:
     se encontrou a música no nosso arquivo binário, retorna seu índice. Se não, retorna número negativo.
+def artistEdit:
 
 
 para cada linha lida reversamente:

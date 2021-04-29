@@ -7,3 +7,4 @@ RML
  - Logs de erros (-1: informação não encontrada; -2: arquivo não encontrado, etc)
  - Interface de usuário precisa ser casável com nossas funções.
  - Serial (e não ordenado. E para os outros itens também seria necessário).
+ - Teste
