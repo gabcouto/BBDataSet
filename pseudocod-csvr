@@ -1,13 +1,15 @@
 # coisas faltando das subliminaridades, por exemplo, em artistAdd
 
+# Em tudo aqui, pressupomos que percorramos o .csv de baixo para cima.
+
+# Reparar que esta função APENAS adiciona um artista inexistente. 
 def artistAdd:
     adiciona linha no arquivobin com:
         Nome
         Ultima Aparição
-        Primeira Aparição (com o mesmo valor de Última Aparição)
+        Primeira Aparição (com o mesmo valor de Última Aparição. Será editado posteriormente, caso possua mais de uma aparição.)
         Wob-artist = 1 (será incrementado conforme for reaparecendo)
-
-
+        indice-artista
     return indexArtist
 def musicAdd:
     adiciona linha no arquivobin com titulo,wob-song,peak-rank, indice-musica(gerado agora), indice-artista(indexArtistTemp)   
@@ -16,31 +18,42 @@ def artistIsPresent:
 def musicIsPresent:
     se encontrou a música no nosso arquivo binário, retorna seu índice. Se não, retorna número negativo.
 def artistEdit:
+    recebe o indice do artista, a posição da coluna a ser modificada, e o dado que será substituido.
 
+# currentWeek otimizado. i = i % 7? Lembrar que lemos de baixo pra cima. Não são apenas 7 elementos por semana.
+# lastWeek. Aí quem vai ser igual a quem?
 
 para cada linha lida reversamente:
-    se artistIsPresent < 0
-    {
-        # Neste caso, precisamos adicionar tanto o artista quanto a musica.
-        indexArtistTemp = artistAdd()
-        musicAdd(indexArtistTemp)
-        # Como passar o indice-artista para o adicionar_musica?
-    }
-
     indexArtistTemp = artistIsPresent()
-    se indexArtistTemp >= 0 # Se tivermos retornado um índice
-    {
-        se musicIsPresent < 0 # Se nao encontrarmos nenhum indice para a musica, ou seja, a musica nao está no arquivo binário.
+        se indexArtistTemp < 0
         {
+            # Neste caso, precisamos adicionar tanto o artista quanto a musica. Repare que caso o Artista não exista, criamos um artista e colocamos seu índice dentro de indexArtistTemp.
+            indexArtistTemp = artistAdd()
             musicAdd(indexArtistTemp)
         }
-        else
+        se indexArtistTemp >= 0 # Se tivermos retornado um índice
         {
-            # só existirá essa seção de código se for necessário para o parâmetro nota.
+            se musicIsPresent < 0 # Se nao encontrarmos nenhum indice para a musica, ou seja, a musica nao está no arquivo binário.
+            {
+                musicAdd(indexArtistTemp)
+            }
+            else
+            {
+                # só existirá essa seção de código caso seja necessária para o parâmetro nota da MÚSICA.
+            }
+            # OBS: Ainda dentro de [indexArtistTemp >=0]
+            # Se o artista já está no arquivo, significa que precisamos editá-lo, porque temos um novo "Primeira Aparição".
+            # Se a data da primeira aparição no arquivo for diferente de currentWeek, currentWeek é o novo candidato para "primeira aparição".
+            # Além disso, incrementamos weeksOnBoard do Artista.
+            # Se o artista já está no arquivo, também precisamos incrementar o Wob-artist, mas desde que não estejamos em uma mesma semana
+            if(artistGet("primeira aparição") != currentWeek)
+                artistEdit(indexArtistTemp,[numero_coluna_primeira_aparicao], currentWeek)
+                artistEdit(indexArtistTemp, [numero_coluna_wob], artistGet("wob")+1)
+            
+            else
+                # não vejo nenhuma maneira de encontrar uma solução para isso sem ter um grande vetor ou alguma solução burra.
+                # contudo, talvez usando aguma técnica aprendida na disciplina possamos usar algum arquivo temporário.
+                # Para a mesma semana.
+
+
         }
-
-        # Se o artista já está no arquivo, significa que precisamos editá-lo, porque temos um novo "Primeira Aparição"
-
-        # Se o artista já está no arquivo, também precisamos incrementar o Wob-artist, mas desde que não estejamos em uma mesma semana
-
-    }
