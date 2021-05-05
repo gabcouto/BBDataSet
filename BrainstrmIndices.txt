@@ -1,0 +1,16 @@
+Brainstorm dos Arquivos de Indices:
+
+
+Arquivos invertidos para:
+WOB (artista e música),
+Peak rank,
+BWA (Quantidade de aparições na melhor semana) (talvez)
+    Ex.:
+        Peak rank:
+        1 -> indice1 -> indice2 -> indice3      (índices em ordem de wob (wob em ordem alfabética))
+        2 -> indice1 -> ...
+        3 ...
+        ...
+        100 -> ...
+
+Já soluciona problema e faz impressão invertida sem ordem +secundaria invertida
