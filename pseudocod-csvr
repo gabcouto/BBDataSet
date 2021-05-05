@@ -55,6 +55,15 @@ para cada linha lida reversamente:
                 # não vejo nenhuma maneira de encontrar uma solução para isso sem ter um grande vetor ou alguma solução burra.
                 # contudo, talvez usando aguma técnica aprendida na disciplina possamos usar algum arquivo temporário.
                 # Para a mesma semana.
-
-
-        }
+                #if (SemAtual == PrimeiraAparição)
+                #   Qnt++;
+                #else{
+                #    if(Qnt%100 >= Qnt/100)
+                #        Qnt %= 100;
+                #        Qnt*=100
+                #        Ocorr = PrimeiraAparição
+                #    else {
+                #        Qnt-= Qnt%100;
+                #    }
+                #    PrimeiraAparição = SemAtual;
+                #    }
