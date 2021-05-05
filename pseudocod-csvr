@@ -1,6 +1,7 @@
 # coisas faltando das subliminaridades, por exemplo, em artistAdd
 
 # Em tudo aqui, pressupomos que percorramos o .csv de baixo para cima.
+# Ao ler do arquivo, talvez seja melhor pegar tudo de uma linha direto.
 
 # Reparar que esta função APENAS adiciona um artista inexistente. 
 def artistAdd:
