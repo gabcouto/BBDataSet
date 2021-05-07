@@ -7,10 +7,58 @@ Peak rank,
 BWA (Quantidade de aparições na melhor semana) (talvez)
     Ex.:
         Peak rank:
-        1 -> indice1 -> indice2 -> indice3      (índices em ordem de wob (wob em ordem alfabética))
+        1 -> indice1 -> indice2 -> indice3      (índices em ordem alfabética) (é, tem q dumpar a ideia de rank->wob->alfabética)
         2 -> indice1 -> ...
         3 ...
         ...
         100 -> ...
 
 Já soluciona problema e faz impressão invertida sem ordem +secundaria invertida
+
+peak rank:
+##########################
+pr = peak_rank_da_música
+
+ii_pr= open(nome_arquivo, [w sem reescrever], [0])
+
+pr= pr-1
+
+pr \n's
+
+vai pro fim e escreve
+
+ii_pr.close()
+
+from collections import defaultdict
+
+class InvertedIndex(object):
+    def __init__(self):
+        # Map from a feature string like "ccO" to an integer feature id
+        self.feature_to_id = {}
+        # Map from an integer feature id to a set of record ids
+        self.inverted_indices = defaultdict(set)
+
+    def get_feature_id(self, feature):
+        try:
+            return self.feature_to_id[feature]
+        except KeyError:
+            n = len(self.feature_to_id)
+            self.feature_to_id[feature] = n
+            return n
+
+    def add_record(self, id, feature_ids):
+        for feature_id in feature_ids:
+            self.inverted_indices[feature_id].add(id)
+
+    def search(self, features):
+        # These are *features*, not *feature_ids*.
+        # If the feature wasn't seen before then there are no entries
+        # and this will raise a KeyError, meaning nothing found.
+        try:
+            terms = [self.inverted_indices[self.feature_to_id[feature]] for feature in features]
+        except KeyError:
+            return set()
+        terms.sort(key=len)
+        return set.intersection(*terms)
+
+ii_pk = open(inverted_peakrank, [wb], [0])
