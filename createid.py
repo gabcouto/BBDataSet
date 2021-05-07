@@ -1,15 +1,11 @@
 from typing import Tuple
 
-
 class TrieNode(object):
-   
     def __init__(self, char: str):
         self.char = char
         self.children = []
         # No fim do titulo, o ID`!= 0
         self.word_finished = 0
-
-    
 
 def add(root, word: str, id):
     node = root
@@ -38,10 +34,12 @@ def add(root, word: str, id):
 
 def allids(root):
         node = root
-        # Se n tem mais filho e bota no arquivo a musica do id e retorna 0 pq trabalho com recursão aqui
+        # Se n tem mais filho, bota no arquivo a musica do id e retorna 0 pq trabalho com recursão aqui
         if not root.children:
             print(node.word_finished)####################deletar isso
             #write(algumafunçãoaí(node.word_finished))##############################################################################
+            #deleta o nodo pq ele é folha e n vai mais ser usado
+            del node
             return 0
         # Defini oq seria uma ordem alfabética aqui, talvez possam ser tirados alguns simbolos pra melhor eficiencia################
         for char in "0123456789 AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz'!#$%&\()*+,-./:;<=>?@[\\]_{|}":
@@ -56,14 +54,52 @@ def allids(root):
                     # break pq n da pra ter 2 nodos filhos com o mesmo valor
                     break
         # Se tem id, coloca no arquivo a musica dele
+        # Esse é o caso de have um palavra "dentro" de outra
         if node.word_finished > 0:
             print(node.word_finished)###############deletar isso
             #write(algumafunçãoaí(node.word_finished))##############################################################################
+        del node
         return 0
+
+#fazer vetor de 100 pointers para a class TrieNode
+class TriePointer(object):
+    def __init__(self, chave):
+        self.chave = chave
+        self.pointsto = TrieNode('*')
+        self.proximo = None
+
+def insereTrie(self, titulo:str ,chave, id):
+    if self.chave == chave: 
+        #é o lugar certo, pode adicionar
+        add(self.pointsto, titulo, id)
+    else:
+        if self.chave > chave or self.proximo == None: #não tem igual ou já ta no final, cria novo
+            trieaux=TriePointer(1)
+            trieaux.proximo = self.proximo
+            self.proximo = trieaux
+            trieaux.chave = chave 
+            add(self.pointsto, titulo, id)
+        else: #ve se a proxima é o lugar certo
+            insereTrie(self.proximo, titulo, chave, id)
+
+def allidspointer(self):
+    allids(self.pointsto)
+    if self.proximo != None:
+        allidspointer(self.proximo)
+
+peakranks = TriePointer(1)
+wobsongs = TriePointer(1)
+wobartists = TriePointer(1)
+notasongs = TriePointer(1)
+notaartista = TriePointer(1)
+aparicoesartist = TriePointer(1)
 
 if __name__ == "__main__":
     SongTitles = TrieNode('*')
     ArtistNames = TrieNode('*')
+    #add(SongTitles, nome da musica, iddamusica)
+    #add(ArtistNames, nome do artista, iddoartista)
+    #adições teste:
     add(SongTitles, "blackbird", 123)
     add(SongTitles, "zurrilho", 26)
     add(SongTitles, "all my loving", 100)
@@ -89,3 +125,15 @@ if __name__ == "__main__":
     #ArtNameID = open(nome_artista, ab)###################################
     allids(ArtistNames)
     #ArtNameID.close()####################################################
+    
+
+#exemplo de varios adds no vetor de peakranks
+for pkrnkvl in range(2, 7, 2):
+    insereTrie(peakranks, "blackice", pkrnkvl, 60)
+    insereTrie(peakranks, "black treacle", pkrnkvl, 61)
+    insereTrie(peakranks, "bill gates", pkrnkvl, 609000)
+
+allidspointer(peakranks)
+
+#wobval=4
+#insereTrie(wobsongs, "blackice", wobval, 6000)
