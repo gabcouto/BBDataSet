@@ -69,18 +69,20 @@ class TriePointer(object):
         self.proximo = None
 
 def insereTrie(self, titulo:str ,chave, id):
-    if self.chave == chave: 
-        #é o lugar certo, pode adicionar
+    if self.chave==chave:   #se a chave é a msm do primeiro só adiciona a musica na trie
         add(self.pointsto, titulo, id)
     else:
-        if self.chave > chave or self.proximo == None: #não tem igual ou já ta no final, cria novo
+        while self.proximo != None: #procura o lugar onde deve ser inserido
+            if self.proximo.chave <= chave:
+                self = self.proximo
+        if self.chave!=chave:   #se n tiver a trie com a chave, cria ela
             trieaux=TriePointer(1)
             trieaux.proximo = self.proximo
             self.proximo = trieaux
-            trieaux.chave = chave 
+            trieaux.chave = chave
+            add(trieaux.pointsto, titulo, id)
+        else:
             add(self.pointsto, titulo, id)
-        else: #ve se a proxima é o lugar certo
-            insereTrie(self.proximo, titulo, chave, id)
 
 def allidspointer(self):
     allids(self.pointsto)
@@ -93,47 +95,53 @@ wobartists = TriePointer(1)
 notasongs = TriePointer(1)
 notaartista = TriePointer(1)
 aparicoesartist = TriePointer(1)
+SongTitles = TrieNode('*')
+ArtistNames = TrieNode('*')
 
-if __name__ == "__main__":
-    SongTitles = TrieNode('*')
-    ArtistNames = TrieNode('*')
-    #add(SongTitles, nome da musica, iddamusica)
-    #add(ArtistNames, nome do artista, iddoartista)
-    #adições teste:
-    add(SongTitles, "blackbird", 123)
-    add(SongTitles, "zurrilho", 26)
-    add(SongTitles, "all my loving", 100)
-    add(SongTitles, "01leg", 2)
-    add(SongTitles, "black", 231)
-    add(SongTitles, "hells bells", 90)
-    add(SongTitles, "hells bells", 92)
-    add(SongTitles, "00leg", 1)
-    add(SongTitles, "hells breaking loose", 91)
-    add(SongTitles, "zai se eu te pego", 25)
-    add(SongTitles, "back in black", 12)
+#insereTrie(peakranks, nome da musica, valorpeakrank, iddamusica)
+#insereTrie(wobsongs, nome da musica, valorwob, iddamusica)
+#insereTrie(wobartists, nome do artista, valorwobart, iddoartista)
+#insereTrie(notasongs, nome da musica, valornotas, iddamusica)
+#insereTrie(notaartista, nome do artista, valornotaa, iddoartista)
+#insereTrie(aparicoesartist, nome do artista, aparaicoes, iddoartista)
+#add(SongTitles, nome da musica, iddamusica)
+#add(ArtistNames, nome do artista, iddoartista)
 
-    add(ArtistNames, "Johnny Cash", 90)
-    add(ArtistNames, "John Lennon", 89)
-    add(ArtistNames, "Johnsson Jack", 91)
-    add(ArtistNames, "Steph Curry", 110)
-    add(ArtistNames, "Stephen Hawkings", 111)
+#IDpeakrank = open(IDpeakrank, ab)#####################################
+allidspointer(peakranks)
+#IDpeakrank.close()####################################################
+##### igual os outros
 
-    #SongTitl = open (musica_titulo, ab)##################################
-    allids(SongTitles)
-    #SongTitl.close()#####################################################
+#IDtitulos = open (musica_titulo, ab)##################################
+allids(SongTitles)
+#IDtitulos.close()#####################################################
 
-    #ArtNameID = open(nome_artista, ab)###################################
-    allids(ArtistNames)
-    #ArtNameID.close()####################################################
+#IDnomes = open(nome_artista, ab)######################################
+allids(ArtistNames)
+#IDnomes.close()####################################################
+
+#adições teste:
+#add(SongTitles, "blackbird", 123)
+#add(SongTitles, "zurrilho", 26)
+#add(SongTitles, "all my loving", 100)
+#add(SongTitles, "01leg", 2)
+#add(SongTitles, "black", 231)
+#add(SongTitles, "hells bells", 90)
+#add(SongTitles, "hells bells", 92)
+#add(SongTitles, "00leg", 1)
+#add(SongTitles, "hells breaking loose", 91)
+#add(SongTitles, "zai se eu te pego", 25)
+#add(SongTitles, "back in black", 12)
+
+#add(ArtistNames, "Johnny Cash", 90)
+#add(ArtistNames, "John Lennon", 89)
+#add(ArtistNames, "Johnsson Jack", 91)
+#add(ArtistNames, "Steph Curry", 110)
+#add(ArtistNames, "Stephen Hawkings", 111)
     
 
 #exemplo de varios adds no vetor de peakranks
-for pkrnkvl in range(2, 7, 2):
-    insereTrie(peakranks, "blackice", pkrnkvl, 60)
-    insereTrie(peakranks, "black treacle", pkrnkvl, 61)
-    insereTrie(peakranks, "bill gates", pkrnkvl, 609000)
-
-allidspointer(peakranks)
-
-#wobval=4
-#insereTrie(wobsongs, "blackice", wobval, 6000)
+#for pkrnkvl in range(1, 9, 2):
+    #insereTrie(peakranks, "blackice", pkrnkvl, 3)
+    #insereTrie(peakranks, "black treacle", pkrnkvl, 2)
+    #insereTrie(peakranks, "bill gates", pkrnkvl, 1)
