@@ -171,8 +171,8 @@ sizeofstructint = 8
         int prox;
     }
 '''
-IDsstr = struct.Struct('70s I I')
-sizeofstructstr = 80
+IDsstr = struct.Struct('180s I I')
+sizeofstructstr = 190
 '''
 #cria arquivos com 100 structs nulas
 ARQtitulos = "indices_titulos.bin"
@@ -218,6 +218,8 @@ ARQ3.close()
 ARQ4.close()
 ARQ5.close()
 '''
+
+#adiciona nomes em ordem alfabética em um arquivo de indices
 def addcolstr (arq, id, word:str):
     #vai pro lugar do arquivo onde começa as palavras com o mesmo primeiro dígito
     arq.seek((ord(word[0])-1)*sizeofstructstr)
@@ -254,6 +256,7 @@ def addcolstr (arq, id, word:str):
         Listastruct[0] = Listastruct[0].decode('utf-8')
         arq.seek(-sizeofstructstr, 1)
 
+#adiciona nomes em ordem alfabetica reversa em um arquivo de string e indices
 def addcolstrReverse (arq, id, word:str):
     #vai pro lugar do arquivo onde começa as palavras com o mesmo primeiro dígito
     arq.seek((127 - ord(word[0]))*sizeofstructstr)
@@ -288,7 +291,7 @@ def addcolstrReverse (arq, id, word:str):
         Listastruct[0] = Listastruct[0].decode('utf-8')
         arq.seek(-sizeofstructstr, 1)
 
-#self = arquivo, id = indice, chave = peakrank/wob
+#self = arquivo, id = indice, chave = peakrank/wob, adiciona num arquivo apenas de indices 
 def addcolint (arq, id, chave):
     #vai pro lugar do arquivo onde começa o respectivo peakrank/wob
     arq.seek((chave-1)*sizeofstructint)
@@ -312,25 +315,31 @@ def addcolint (arq, id, chave):
     #coloca a nova struct
     arq.write(IDsint.pack(id, 0))
         
-#recebe arquivo e bool, if false -> reverso ######################################################
-def fetchindices(arq, inorder):
+#recebe arquivo,  bool inorder: if false -> reverso e bool tipo: if true é artista if false é musica
+def fetchindices(arq, inorder, tipo):
     i=0
     if inorder:
         while i < 128:
             #vai pro primeiro indice com aquele peakrank/wob
             arq.seek(i*sizeofstructint)
             Listastruct = list(IDsint.unpack(arq.read(sizeofstructint)))
+
             #vai percorrendo todos ID daquela chave até não ter mais
             while Listastruct[1]!=0:
                 if Listastruct[0] != 0:
-                    #print(Listastruct[0])
-                    #Aqui Chama a função q Recebe o ID e Imprime as coisas##########################################
+                    if tipo == True:
+                        artistPrint(Listastruct[0])
+                    else:
+                        songPrint(Listastruct[0])
                 arq.seek(Listastruct[1])
                 Listastruct = list(IDsint.unpack(arq.read(sizeofstructint)))
+
             #imprime o ultimo valor que precede o 0 e aumenta o valor da chave
             if Listastruct[0] != 0:
-                #print(Listastruct[0])
-                #Aqui Chama a função q Recebe o ID e Imprime as coisas##########################################
+                if tipo == True:
+                    artistPrint(Listastruct[0])
+                else:
+                    songPrint(Listastruct[0])
             i=i+1
     else:
         i=127
@@ -341,37 +350,48 @@ def fetchindices(arq, inorder):
             #vai percorrendo todos ID daquela chave até não ter mais
             while Listastruct[1]!=0:
                 if Listastruct[0] != 0:
-                    #print(Listastruct[0])
-                    #Aqui Chama a função q Recebe o ID e Imprime as coisas##########################################
+                    if tipo == True:
+                        artistPrint(Listastruct[0])
+                    else:
+                        songPrint(Listastruct[0])
                 arq.seek(Listastruct[1])
                 Listastruct = list(IDsint.unpack(arq.read(sizeofstructint)))
             #imprime o ultimo valor q precede o 0 diminui o valor da chave
             if Listastruct[0] != 0:
-                #print(Listastruct[0])
-                #Aqui Chama a função q Recebe o ID e Imprime as coisas##########################################
+                if tipo == True:
+                    artistPrint(Listastruct[0])
+                else:
+                    songPrint(Listastruct[0])
             i=i-1
-########################################################################################
-def fetchAlfasIds(arq):
+
+#Percorre um arquivo de strings e indices em ordem (tipo True = artista, tipo False = musica)
+def fetchAlfasIds(arq, tipo):
     i=0
     while i < 128:
         #vai pro primeiro indice com aquele peakrank/wob
         arq.seek(i*sizeofstructstr)
         Listastruct = list(IDsstr.unpack(arq.read(sizeofstructstr)))
+
         #vai percorrendo todos ID daquela chave até não ter mais
         while Listastruct[1]!=0:
-            print(arq.tell(), Listastruct[0].decode('utf-8'), Listastruct[1], Listastruct[2])
-            #Aqui Chama a função q Recebe o ID e Imprime as coisas##########################################
+            print(Listastruct[0].decode('utf-8'))
+            if tipo == True:
+                artistPrint(Listastruct[1])
+            else:
+                songPrint(Listastruct[1])
             arq.seek(Listastruct[2])
             Listastruct = list(IDsstr.unpack(arq.read(sizeofstructstr)))
         i=i+1
-############################################################
 
-#recebe o arquivo de musica/artista, e oq está sendo procurado, retorna lista de Ids
+#recebe o arquivo de musica/artista, e oq está sendo procurado, retorna lista de Ids != [0] se existir
 def find_index(arq, word:str):
+    #pula pra onde começa as palavras com a msm letra inicial
     arq.seek((ord(word[0])-1)*sizeofstructstr)
     Listastruct = list(IDsstr.unpack(arq.read(sizeofstructstr)))
     Listastruct[0] = Listastruct[0].decode('utf-8')
+    #procura a primeira que n vem antes q ela alfabeticamente
     while Listastruct[0]<word:
+        #se todas vem antes e n tem:
         if Listastruct[2]==0:
             return [0]
         arq.seek(Listastruct[2])
@@ -379,16 +399,22 @@ def find_index(arq, word:str):
         Listastruct[0] = Listastruct[0].decode('utf-8')
     arq.seek(-sizeofstructstr, 1)
 
-    if Listastruct[0]>word:
-        return [0]
-    else:
+    #tira os quase 70 0s q tem dps do nome
+    Listastruct[0] = Listastruct[0].rstrip(chr(0))
+
+    #se estiver olhando para uma q vem dps, n tem a q está sendo procurada
+    #se estiver olhando para uma igual, retorna todos ids dos nomes iguais
+    if Listastruct[0]==word:
         indices = []
         while Listastruct[0] == word:
             indices.append(Listastruct[1])
             arq.seek(Listastruct[2])
             Listastruct = list(IDsstr.unpack(arq.read(sizeofstructstr)))
             Listastruct[0] = Listastruct[0].decode('utf-8')
+            Listastruct[0] = Listastruct[0].rstrip(chr(0))
         return indices
+    else:
+        return [0]
 
 
 '''
@@ -410,8 +436,10 @@ ARQR.close()
 
 ARQ= open(ARQtitulos, 'rb')
 ARQR = open(ARQtreverso, 'rb')
-fetchAlfasIds(ARQ)
-fetchAlfasIds(ARQR)
+fetchAlfasIds(ARQ, bool(artista=true musica=false))
+fetchAlfasIds(ARQR, bool (artista=true musica =false))
+Lista = find_index(ARQ, string pra achar)
+print(Lista)
 ARQ.close()
 ARQR.close()
 '''
